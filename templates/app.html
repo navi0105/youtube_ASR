@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Yu-Chen Lin">
+    <title>
+        A Subtitles Generator using WeNet Toolkits
+    </title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css')  }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/progress.css')  }}" />
+    <link rel="icon" type="image/gif" href="{{ url_for('static', filename='images/logo.png')  }}" />
+</head>
+
+<!--
+<body style="background-color:#B4E8F9">
+-->
+<body background="{{ url_for('static', filename='images/background.png') }}">
+    <header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <!--
+        <a class="navbar-brand" href="https://www.csie.ntu.edu.tw/">
+            <img src="{{ url_for('static', filename='images/logo.png') }}"/></a>
+        -->
+        <a class="navbar-brand">
+            <h1>
+                <font color="#D9FFFF">
+                    A Subtitles Generator using WeNet Toolkits
+                </font>
+            </h1>
+        </a>
+    </nav>
+</header>
+
+<!--
+<div class="container">
+-->
+<main 
+    role="main" 
+    class="container"
+    id="main">
+
+    <div class="container">
+        <div 
+            id="inputUrlPart" 
+            style="display:true"
+            class="row justify-content-center align-items-center">
+            <div class="col">
+                <br>
+                <br>
+                <center>
+                    <font style="font-size: 50pt" color="#BBFFFF">
+                        <u>
+                            YouTube 網址
+                        </u>
+                    </font>
+
+                    <form method="POST" action="./submit">
+                        <div class="input-group">
+                            <input type="url" 
+                                   name="text" 
+                                   id="urlInput" 
+                                   placeholder="https://youtu.be/23lOOpZNXuA" 
+                                   style="hight:180px; width:750px; font-size:50px"
+                                   autocomplete="off"> 
+                            </input>
+                            &nbsp; 
+                            &nbsp; 
+                            <button 
+                                id="getUrlBtn" 
+                                type="submit" 
+                                class="btn btn-success btnUrlRecord" 
+                                style="height:140px; width:255px; font-size:50px">
+                                <i class="fa fa-check fa-2x"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <br> 
+                    <br> 
+                </center>
+            </div>
+        </div>
+        <div
+            id="decodeProcess"
+            style="display:true; visibility:hidden"
+            class="row justify-content-center align-items-center">
+            <br>
+            <br>
+            <div class="col">
+                <center>
+                    <br>
+                    <font style="font-size: 50pt" color="#BBFFFF">
+                        <u>
+                            Decoding......
+                        </u>
+                    </font>
+                    <br>
+                    <div class="progress" style="height: 80px">
+                          <div id="progress-decode"
+                              class="progress-bar progress-bar-striped progress-bar-animated" 
+                              role="progressbar" 
+                              aria-valuenow="75" 
+                              aria-valuemin="0" 
+                              aria-valuemax="100" 
+                              style="width: 0%">
+                              <span id="progress-text"
+                                  style="font-size: 30pt">
+                                0%
+                              </span>
+                          </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <div
+            id="subtitlesProcess"
+            style="display:true; visibility:hidden"
+            class="row justify-content-center align-items-center">
+            <br>
+            <br>
+            <div class="col">
+                <center>
+                    <br>
+                    <font style="font-size: 50pt" color="#BBFFFF">
+                        <u>
+                            Subtitles Generatating......
+                        </u>
+                    </font>
+                    <br>
+                    <div class="progress" style="height: 80px">
+                          <div id="progress-subtitles"
+                              class="progress-bar progress-bar-striped progress-bar-animated bg-warning" 
+                              role="progressbar" 
+                              aria-valuenow="75" 
+                              aria-valuemin="0" 
+                              aria-valuemax="100" 
+                              style="width: 0%">
+                              <span id="progress-subtitles-text"
+                                  style="font-size: 30pt">
+                                0%
+                              </span>
+                          </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <div
+            id="showMovie"
+            style="display:true; visibility:hidden"
+            class="row justify-content-center align-items-center">
+            <div class="col">
+                <center>
+                    <font style="font-size: 50pt" color="#BBFFFF">
+                        <u>
+                            Result
+                        </u>
+                    </font>
+                    <br>
+                    <iframe 
+                        id="videoFrame" 
+                        width=640 
+                        height=480 
+                        src="./{{ data['taskID'] }}/preview">
+                    </iframe>
+                </center>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col">
+                <center>
+
+                </center>
+            </div>
+        </div>
+    </div>
+    -->
+</main>
+
+    <footer class="footer">
+        <div class="container" style="text-align:center;">
+            <span class="span-center">
+                2022 - 數位語音處理概論 專題, 由 梁俊彥 與 林育辰 製作, 僅限展示所用。
+            </span>
+        </div>
+    </footer>
+
+            <!--
+                {% if data.isStartWait %}
+            <a href="./static/video/movie_{{ data['userId'] }}.mp4" style="" download="movie_{{ data['userId'] }}.mp4">原始影片檔</a> <br>
+            <a href="./static/srt/out_{{ data['userId'] }}.srt" style="" download="out_{{ data['userId'] }}.srt">srt 字幕檔</a> <br>
+            <a href="./static/video/movie_{{ data['userId'] }}_finish.mp4" style="" download="movie_{{ data['userId'] }}_finish.mp4">加工影片檔 (已上字幕)</a>
+                {% endif %}
+            -->
+
+
+    <script>
+        let dataPassing = document.getElementById('main');
+        let data = {
+            'check': true
+        }
+        document.getElementById("main").setAttribute('data', data);
+
+        let btnUrl = document.getElementById('getUrlBtn');
+        let inputUrl = document.getElementById('urlInput');
+        let url = "";
+
+        function btnUrlRecord() {
+            url = inputUrl.value;
+            console.log(url);
+            console.log("{{ data['taskID'] }}");
+            return url;
+        }
+
+        btnUrl.addEventListener("click", btnUrlRecord);
+
+
+
+
+        window.setInterval(function() {
+            render();
+        }, 500);
+
+        let check = false;
+        function render() {
+            var path = "./check/" + "{{ data['taskID'] }}";
+            console.log(path);
+
+            axios.post(path)
+               .then( (res) => {
+                   console.log(res.data.state);
+                   if (res.data.state === "decoding") {
+                        let element = document.getElementById('inputUrlPart');
+                        element.style.display = "none";
+                        let elementProcess = document.getElementById('decodeProcess');
+                        elementProcess.style.visibility= "visible";
+
+                        var progress = document.getElementById('progress-decode');
+                        progress.style.width = res.data.decode_progress + "%";
+                        var progressText = document.getElementById('progress-text');
+                        progressText.textContent = res.data.decode_progress + "%";
+
+                        console.log("decode");
+
+                   } else if (res.data.state === "subtitlesProcessing") {
+                        let element = document.getElementById('decodeProcess');
+                        element.style.display = "none";
+                        let elementProcess = document.getElementById('subtitlesProcess');
+                        elementProcess.style.visibility= "visible";
+
+                        var progress = document.getElementById('progress-subtitles');
+                        progress.style.width = res.data.subtitles_progress + "%";
+                        var progressText = document.getElementById('progress-subtitles-text');
+                        progressText.textContent = res.data.subtitles_progress + "%";
+                        console.log("subtitles");
+                   } else if (res.data.state === "complete" && check === false) {
+                        check = true;
+                        let element = document.getElementById('subtitlesProcess');
+                        element.style.display = "none";
+                        let elementVideo = document.getElementById('showMovie');
+                        elementVideo.style.visibility= "visible";
+
+                        document.getElementById('videoFrame').contentWindow.location.reload();
+                        console.log("comlete");
+
+                   }
+                   //if (check == false && res.data.res == true) {
+                   //    console.log('reloading..');
+                   //    document.getElementById('videoFrame').contentWindow.location.reload();
+                   //    check = true;
+                   //}
+               })
+               .catch( (err) => {
+                   console.log(err);
+               } );
+        }
+        // var check = false;
+
+        // window.setInterval(function() {
+        //     reloadIFrame()
+        // }, 3000);
+
+        // function reloadIFrame() {
+        //     var path = "./checkMovie/" + {{ data['userId'] }}
+
+        //    axios.post(path)
+        //        .then( (res) => {
+        //            if (check == false && res.data.res == true) {
+        //                console.log('reloading..');
+        //                document.getElementById('videoFrame').contentWindow.location.reload();
+        //                check = true;
+        //            }
+        //        })
+        //        .catch( (err) => {
+        //            console.log(err);
+        //        } );
+        //}
+    </script>
+
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    
+</body>
+
+</html>

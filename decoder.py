@@ -17,11 +17,15 @@ from tools.decode import streaming_decode
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--url', 
+    parser.add_argument('--url',
                         '-u',
                         type=str,
                         required=True,
                         help="Youtube video URL.")
+    parser.add_argument('--taskID',
+                        '-t',
+                        type=str,
+                        help="")
     parser.add_argument('--model_dir',
                         '-m',
                         type=str,
@@ -46,11 +50,11 @@ def parse_args():
                         type=str,
                         default=None,
                         help="file path for write down decoded timestamp.")
-    
 
     args = parser.parse_args()
 
     return args
+
 
 def load_decoder(args):
     decoder = wenet.Decoder(model_dir=args.model_dir,
@@ -59,6 +63,7 @@ def load_decoder(args):
                             continuous_decoding=True)
 
     return decoder
+
 
 def extract_result(decode_result):
     curr_end_time = -1
@@ -78,6 +83,7 @@ def extract_result(decode_result):
         if curr_text != '':
             complete_text += curr_text + '\n'
     return complete_text, word_timestamp
+
 
 def main():
     args = parse_args()
@@ -99,7 +105,7 @@ def main():
     print("Decode Result:")
     print(complete_text)
 
-    shutil.rmtree(args.tmp_dir, ignore_errors=True)
+    #shutil.rmtree(args.tmp_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":

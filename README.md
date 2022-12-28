@@ -1,17 +1,27 @@
-# Youtube Video ASR
+# A Subtitles Generator using WeNet Speech
 
-## Introduction
-抓取 Youtube 影片並對影片進行 ASR，辨別語音內容的同時獲取對應之 Timestamp。
+本期末專題為 林育辰、梁俊彥同學於 國立臺灣大學 數位語音處理概論的作品，按照 README 執行後，可於本機開啟網頁，並透過網頁自動以輸入的 YouTube 網址生成有字幕的影片。
+
 
 ## Environment
-`python 3.8`
+- `python 3.8`
+- `Ubuntu 20.04`
+- gdown
+
 
 ## Install Package
 ```shell
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
-## Usage
+## How to build a website
+```shell
+python api.py -d DEBUG -p 2048
+```
+
+接著在網頁上輸入 0.0.0.0:2048 即可使用網頁。
+
+## Decoder Usage
 ```
 python decoder.py \
     --model_dir <model_dir> \
