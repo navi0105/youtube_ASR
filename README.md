@@ -18,7 +18,6 @@ python decoder.py \
     --url <url> \
     --lang <lang> \
     --decode_text_file <decode_text_file> \
-    --enable_timestamp \
     --decode_timestamp_file <decode_timestamp_file>
 
 ```
