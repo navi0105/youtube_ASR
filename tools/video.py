@@ -15,7 +15,7 @@ def get_video_wav(args):
     os.mkdir(tmp_dir)
 
     video = pytube.YouTube(url)
-    video.streams.filter().get_audio_only().download(filename=tmp_mp4)
+    video.streams.filter().get_highest_resolution().download(filename=tmp_mp4)
 
     cmd = f"ffmpeg -i {tmp_mp4} -acodec pcm_s16le -f s16le -ac 1 -ar 16000 -f wav {tmp_wav}"
     subprocess.call(cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

@@ -1,0 +1,8 @@
+20220506_u2pp_conformer_libtorch/
+bert_segment_model/
+final/
+wenetspeech_conformer_finetune_exp/
+
+bert_segment_model.zip
+final.zip
+wenetspeech_conformer_finetune_exp.tar.gz

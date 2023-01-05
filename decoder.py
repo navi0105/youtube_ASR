@@ -13,6 +13,7 @@ import wave
 
 from tools.video import get_video_wav
 from tools.decode import streaming_decode
+from tools.segment import sentence_segment
 
 
 def parse_args():
@@ -46,6 +47,10 @@ def parse_args():
                         type=str,
                         default=None,
                         help="file path for write down decoded timestamp.")
+    parser.add_argument('--segment_model', 
+                        type=str,
+                        default=None,
+                        help="Your BERT Sentence Segment Model.")
     
 
     args = parser.parse_args()
@@ -88,6 +93,9 @@ def main():
 
     all_decode_result = streaming_decode(args, decoder)
     complete_text, word_timestamp = extract_result(all_decode_result)
+    if args.segment_model is not None:
+        assert os.path.exists(args.segment_model)
+        complete_text = sentence_segment(complete_text.splitlines(), args.segment_model)
 
     if args.decode_text_file is not None:
         with open(args.decode_text_file, 'w') as f:

@@ -1,0 +1,5 @@
+gdown 1siDW3K-Lkcv8jRmdrKwOEE-OfQpIw7pC
+tar -zxvf wenetspeech_conformer_finetune_exp.tar.gz
+
+gdown 1j96BLpJTETz7jElAwpXeJYW0sIvOQ4w5
+unzip bert_segment_model.zip
